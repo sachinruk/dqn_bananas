@@ -17,19 +17,19 @@ class QNetwork(nn.Module):
         super(QNetwork, self).__init__()
         self.seed = torch.manual_seed(seed)
         "*** YOUR CODE HERE ***"
-        h = 20
-        self.model = nn.Sequential(nn.Linear(state_size, h),
-                      nn.ReLU(),
-                      nn.Linear(h, h),
-                      nn.ReLU(),
-                      nn.Linear(h, action_size)
-                      )
+        
+        self.fc1 = nn.Linear(state_size, 15)
+        self.fc2 = nn.Linear(15, 15)
+        self.fc3 = nn.Linear(15, 15)
+        self.fc4 = nn.Linear(15, action_size)
         self.criterion = nn.MSELoss()
-#         self.optimizer = optim.Adam(model.parameters())
 
     def forward(self, state):
         """Build a network that maps state -> action values."""
-        return self.model.forward(state)
+        x = F.relu(self.fc1(state))
+        x = F.relu(self.fc2(x))
+        x = F.relu(self.fc3(x))
+        return self.fc4(x)
     
 class QNetworkCNN(nn.Module):
     """Actor (Policy) Model."""

@@ -6,7 +6,7 @@ import torch
 from model import QNetworkCNN, QNetworkDuellingCNN
 from agents import DQNAgent
 
-env = UnityEnvironment(file_name="./Banana.x86_64")
+env = UnityEnvironment(file_name="./Banana_Linux_NoVis/Banana.x86_64")
 
 
 # Environments contain **_brains_** which are responsible for deciding the actions of their associated agents. Here we check for the first brain available, and set it as the default brain we will be controlling from Python.
@@ -38,7 +38,7 @@ print('States have shape:', state.shape)
 # 
 # Of course, you'll have to change the code so that the agent is able to use its experience to gradually choose better actions when interacting with the environment!
 
-def dqn(agent, n_episodes=2000, max_t=1000, eps_start=1.0, eps_end=0.01, eps_decay=0.995):
+def dqn(agent, filename, n_episodes=2000, max_t=1000, eps_start=1.0, eps_end=0.01, eps_decay=0.995):
     """Deep Q-Learning.
     
     Params
@@ -75,12 +75,15 @@ def dqn(agent, n_episodes=2000, max_t=1000, eps_start=1.0, eps_end=0.01, eps_dec
         print('\rEpisode {}\tAverage Score: {:.2f}'.format(i_episode, np.mean(scores_window)), end="")
         if i_episode % 100 == 0:
             print('\rEpisode {}\tAverage Score: {:.2f}'.format(i_episode, np.mean(scores_window)))
-        if np.mean(scores_window)>=13.0:
+        if np.mean(scores_window)>=13.0 or i_episode==n_episodes:
             print('\nEnvironment solved in {:d} episodes!\tAverage Score: {:.2f}'.format(i_episode-100, np.mean(scores_window)))
-            torch.save(agent.qnetwork_local.state_dict(), 'checkpointCNN.pth')
+            torch.save(agent.qnetwork_local.state_dict(), filename)
             break
     return agent, scores
 
 
 agent = DQNAgent(QNetworkDuellingCNN, state_size, action_size, seed=0, ddqn=True)
-agent, scores = dqn(agent, n_episodes=300)
+agent, scores = dqn(agent, 'duellingCNN.pth')
+
+agent2 = DQNAgent(QNetworkCNN, state_size, action_size, seed=0, ddqn=True)
+agent2, scores = dqn(agent2, 'CNN.pth')

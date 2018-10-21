@@ -128,7 +128,7 @@ class DQNAgent():
                 target = rewards+gamma*maxQ*(1-dones)
             old_val = self.qnetwork_local(states).gather(-1, actions) 
 
-        error = torch.abs(old_val - target).detach().numpy().squeeze()
+        error = torch.abs(old_val - target).detach().cpu().numpy().squeeze()
         for i,err in zip(idx, error):
             self.memory.error_buffer[i] = err
 
