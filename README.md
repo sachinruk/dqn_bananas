@@ -7,6 +7,14 @@ The structure of the code is as follows:
 - `Navigation_Pixels.py` contains the code that was *unsuccesfully* used to train a DQN model for the pixel environment.
 - `Navigation.ipynb` is the notebook used to run the DQN model for the non-pixel environment.
 
+## Installation
+Firstly install unity from [here](https://store.unity.com/download). Then do `bash install.sh` to install all dependencies and requirements.
+
+In order to run this project, do `jupyter-lab` from the command line and open `Navigation.ipynb`.
+
+## Problem Environment
+The environment contains a 37 dimensional vector. This includes data such as agents velocity and range information from the laser that the agent emits. There are 4 possible discrete actions. A reward of +1 is given for collecting a yellow banana and -1 for a blue banana. See [here](https://github.com/sachinruk/dqn_bananas.git) for more details.
+
 ## Model
 A four layer model with 15 hidden nodes in each layer with relu activation was used.
 
@@ -44,3 +52,5 @@ The above code shows how an error buffer was used to choose a certain episode ov
 ## Results
 Unfortunately for this problem double dqn + prioritised replay did not offer a major advantage over the normal DQN algorithm. Double DQN finished the fastest at 694 episodes compared to 764 episodes for normal DQN. The double DQN + prioritised replay finished at 770 episodes.
 ![](./dqn_compare.png)
+
+The weights for the double dqn + prioritised replay model is saved in `checkpoint.pth`.
